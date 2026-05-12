@@ -1,0 +1,111 @@
+[ "$_flexed_loaded" ] && return 0
+_flexed_loaded=1
+
+_flexed_usage()
+{
+    cat - <<'EOF'
+usage: flylxsh <container>
+
+Open a Fly environment inside an LXD container via lxc exec.
+
+<container> can be:
+  - a container name  e.g. my-container
+  - a VM name         e.g. my-vm
+EOF
+}
+
+_flexed_prepare()
+{
+    : "${FLY_HOME:=$HOME}"
+    : "${FLY_TMPDIR:=/tmp}"
+    : "${FLY_TARZ:=-z}"
+    : "${_fly_lib:=$FLY_HOME/.fly.d/.fly.lib}"
+    : "${_fly_uuid:=$(cat "$FLY_HOME/.fly.d/.flyuuid" 2>/dev/null || uuidgen)}"
+
+    command -v lxc >/dev/null 2>&1 || {
+        echo "flexed: lxc command not found" >&2
+        return 1
+    }
+    type _fly_pkg_warp >/dev/null 2>&1 || {
+        echo "flexed: load Fly first (. ~/.fly.d/fly source)" >&2
+        return 1
+    }
+
+    _fly_tmpdir="$FLY_TMPDIR/.fly.$(id -u)/$_fly_uuid"
+    _fly_tarz="$FLY_TARZ"
+}
+
+_flexed_stage()
+{
+    typeset container stage_cmd
+
+    container="$1"
+    stage_cmd="$(_fly_xpretar);$(_fly_xpackage)"
+    _fly_package | lxc exec "$container" -- /bin/sh -c "$stage_cmd"
+}
+
+_flexed_attach()
+{
+    typeset container attach_cmd
+
+    container="$1"
+    attach_cmd="FLY_HOME=$_fly_tmpdir; . \"$_fly_tmpdir/.fly.d/.fly.lib/.loginshell\""
+    lxc exec "$container" -- /bin/sh -c "$attach_cmd"
+}
+
+_flexed_run()
+{
+    typeset container
+
+    container="$1"
+    shift
+    [ "$container" ] || {
+        _flexed_usage >&2
+        return 1
+    }
+
+    _flexed_prepare || return $?
+
+    _flexed_stage "$container" || return $?
+    _flexed_attach "$container"
+}
+
+flylxsh()
+{
+    _flexed_run "$@"
+}
+
+flxsh()
+{
+    flylxsh "$@"
+}
+
+flylxshb()
+{
+    _fly_destshell=bash flylxsh "$@"
+}
+
+flxshb()
+{
+    flylxshb "$@"
+}
+
+flylxshz()
+{
+    _fly_destshell=zsh flylxsh "$@"
+}
+
+flxshz()
+{
+    flylxshz "$@"
+}
+
+flylxshk()
+{
+    _fly_destshell=ksh flylxsh "$@"
+}
+
+flxshk()
+{
+    flylxshk "$@"
+}
