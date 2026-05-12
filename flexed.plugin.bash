@@ -18,4 +18,4 @@ _flexed_completion()
     COMPREPLY=($(compgen -W "$containers" -- "$cur"))
 }
 
-complete -F _flexed_completion flxsh flylxsh flxshb flylxshb flxshz flylxshz flxshk flylxshk
+complete -F _flexed_completion flylxcshell flxcshell flylxcbash flxcbash flylxczsh flxczsh flylxcksh flxcksh

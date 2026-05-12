@@ -3,11 +3,11 @@ _flexed_loaded=1
 
 [ "$_hivecore_loaded" ] || { _hive_core="${FLY_HOME:-$HOME}/.fly.d/plugins/hive-core/hive-core"; [ -f "$_hive_core" ] && . "$_hive_core" || { echo "flexed: hive-core plugin not installed — run: fly add f-atwi/hive-core" >&2; return 1; }; unset _hive_core; }
 
-flylxsh()  { _fly_transport_run lxc "$@"; }
-flxsh()    { flylxsh "$@"; }
-flylxshb() { _fly_destshell=bash flylxsh "$@"; }
-flxshb()   { flylxshb "$@"; }
-flylxshz() { _fly_destshell=zsh  flylxsh "$@"; }
-flxshz()   { flylxshz "$@"; }
-flylxshk() { _fly_destshell=ksh  flylxsh "$@"; }
-flxshk()   { flylxshk "$@"; }
+flylxcshell() { _fly_transport_run lxc "$@"; }
+flxcshell()  { flylxcshell "$@"; }
+flylxcbash() { _fly_destshell=bash flylxcshell "$@"; }
+flxcbash()   { flylxcbash "$@"; }
+flylxczsh()  { _fly_destshell=zsh  flylxcshell "$@"; }
+flxczsh()    { flylxczsh "$@"; }
+flylxcksh()  { _fly_destshell=ksh  flylxcshell "$@"; }
+flxcksh()    { flylxcksh "$@"; }
