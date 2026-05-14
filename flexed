@@ -5,9 +5,9 @@ _flexed_loaded=1
 
 flylxcshell() { _fly_transport_run lxc "$@"; }
 flxcshell()  { flylxcshell "$@"; }
-flylxcbash() { _fly_destshell=bash flylxcshell "$@"; }
-flxcbash()   { flylxcbash "$@"; }
-flylxczsh()  { _fly_destshell=zsh  flylxcshell "$@"; }
-flxczsh()    { flylxczsh "$@"; }
-flylxcksh()  { _fly_destshell=ksh  flylxcshell "$@"; }
-flxcksh()    { flylxcksh "$@"; }
+flylxcshellb() { _fly_destshell=bash flylxcshell "$@"; }
+flxcshellb()   { flylxcshellb "$@"; }
+flylxcshellz()  { _fly_destshell=zsh  flylxcshell "$@"; }
+flxcshellz()    { flylxcshellz "$@"; }
+flylxcshellk()  { _fly_destshell=ksh  flylxcshell "$@"; }
+flxcshellk()    { flylxcshellk "$@"; }
